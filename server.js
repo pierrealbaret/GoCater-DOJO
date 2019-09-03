@@ -21,13 +21,13 @@ rl.on("line", function(line) {
     if(!uniqFirstName[firstName]) {
       uniqFirstName[firstName] = firstName;
     } else {
-      commonFirstNames[firstName] = (commonFirstNames[firstName]) ? 0 : commonFirstNames[firstName] +=1;
+      commonFirstNames[firstName] = (!commonFirstNames[firstName]) ? 0 : commonFirstNames[firstName] +=1;
     }
 
     if(!uniqLastName[lastName]) {
       uniqLastName[lastName] = lastName;
     }  else {
-      commonLastNames[lastName] = (commonLastNames[lastName]) ? 0 : commonLastNames[lastName] +=1;
+      commonLastNames[lastName] = (!commonLastNames[lastName]) ? 0 : commonLastNames[lastName] +=1;
     }
 
     if(!uniqFullName[firstName] && !uniqFullName[firstName] !== lastName) {
