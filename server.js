@@ -5,11 +5,9 @@ const rl = readline.createInterface({
   input: fs.createReadStream("./test-data-10-exp-5.list")
 });
 
-let uniqLastName = {};
-let uniqFirstName = {};
-let uniqFullName = {};
-let commonFirstNames = {};
-let commonLastNames = {};
+const UserCollection = require('./factory/UserCollection');
+
+let fullNameList = [];
 
 rl.on("line", function(line) {
 
@@ -18,27 +16,31 @@ rl.on("line", function(line) {
     const firstName =  line.match(/(.*),/)[1].trim().toUpperCase();
     const lastName =  line.match(/,(.*)--/)[1].trim().toUpperCase();
 
-    if(!uniqFirstName[firstName]) {
-      uniqFirstName[firstName] = firstName;
-    } else {
-      commonFirstNames[firstName] = (!commonFirstNames[firstName]) ? 0 : commonFirstNames[firstName] +=1;
-    }
-
-    if(!uniqLastName[lastName]) {
-      uniqLastName[lastName] = lastName;
-    }  else {
-      commonLastNames[lastName] = (!commonLastNames[lastName]) ? 0 : commonLastNames[lastName] +=1;
-    }
-
-    if(!uniqFullName[firstName] && !uniqFullName[firstName] !== lastName) {
-      uniqFullName[firstName] = lastName;
-    }
+    fullNameList.push({
+      firstName,
+      lastName,
+    });
   }
 
 });
 
 rl.on('close', function() {
-  console.log(`There is ${Object.keys(uniqFullName).length} unique full name`);
-  console.log(`There is ${Object.keys(uniqFirstName).length} unique first name`);
-  console.log(`There is ${Object.keys(uniqLastName).length} unique last name`);
+  console.log('fullNameList', fullNameList);
+
+  const UserList = new UserCollection(fullNameList);
+  console.log(UserList.getMostCommonFirstNames());
+// UniqFullName
+// UniqFirstName
+// UniqLastName
+  console.log('---------- START ----------');
+  console.log(`There is ${UserList.getUniqFirstNameSet().size} unique first name`);
+  console.log('---------------------------');
+  console.log(`There is ${UserList.getUniqLastNameSet().size} unique last name`);
+  console.log('---------------------------');
+  console.log(`There is ${UserList.getUniqFullNameSet().size} unique full name`);
+  console.log('---------------------------');
+  console.log(`The 10 most common first name are ${UserList.getMostCommonFirstNames()}`)
+  console.log('---------------------------');
+  console.log(`The 10 most common names are ${UserList.getMostCommonLastNames()}`)
+  console.log('---------- END ------------');
 });
